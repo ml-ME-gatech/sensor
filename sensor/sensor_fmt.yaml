@@ -1,0 +1,25 @@
+SensorName:
+	name: Sensor1
+	id: S1
+	part-number: example-part-number123
+	manufacturer: sensor-company
+	installation-date: 01/01/01
+	location: physical location
+	contact: some-email@namespace.com
+	type: type of sensor
+	signal: [V] or [A]
+	measure-units: [units of measurement] ex [K], [m/s], [mm/mm]
+	voltage-min: minimum voltage
+	voltage-max: maximum voltage
+	current-min: minimum current
+	current-max: maximum current
+	measure-min: minimum measurement
+	measure-max: maximum measurement
+	sample-max: maximum sample rate [Hz]
+	sample-min: minimum sample rate [Hz]
+	equation: equation converting signal units to measure units with desired output as y, and signal as x. Must be equal to 0. example -- example y - 2 x - 3
+	uncertainty: [signal units] [units of measurement] or [%]
+	interface: hardware interface specifications from sensor to signal
+
+
+

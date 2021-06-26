@@ -1,0 +1,36 @@
++------+----------------------------------+-----------+---------------+-------------------------------------------------------------------------------------------------+
+|      |               type               | interface |  part_number  |                                            location                                             |
++------+----------------------------------+-----------+---------------+-------------------------------------------------------------------------------------------------+
+|  T1  |           Thermocouple           | M12 4 pin | SCAXL-020U-12 |       taped to the outside of the heater inlet lines on heater furthest from test section       |
+|  T2  |           Thermocouple           | M12 4 pin | SCAXL-020U-12 |   taped to the outside of the heater inlet lines on heater second furthest from test section    |
+|  T3  |           Thermocouple           | M12 4 pin | SCAXL-020U-12 |     taped to the outside of the heater inlet lines on heater second closest to test section     |
+|  T4  |           Thermocouple           | M12 4 pin | SCAXL-020U-12 |        taped to the outside of the heater inlet lines on heater closest to test section         |
+|  T5  |           Thermocouple           | M12 4 pin | SCAXL-020U-12 |      taped to the outside of the heater outlet lines on heater furthest from test section       |
+|  T6  |           Thermocouple           | M12 4 pin | SCAXL-020U-12 |   taped to the outside of the heater outlet lines on heater second furthest from test section   |
+|  T7  |           Thermocouple           | M12 4 pin | SCAXL-020U-12 |    taped to the outside of the heater outlet lines on heater second closest to test section     |
+|  T8  |           Thermocouple           | M12 4 pin | SCAXL-020U-12 |        taped to the outside of the heater outlet lines on heater closest to test section        |
+|  T9  |           Thermocouple           | M12 4 pin | KMQSS-125U-6  |                        center of flow probe at the outlet of the cooler                         |
+| T10  |           Thermocouple           | M12 4 pin | KMQSS-125U-12 |             center of flow probe at the valve stack at the inlet of the compressor              |
+| T11  |           Thermocouple           | M12 4 pin | KMQSS-125U-12 |             center of flow probe at the valve stack at the outlet of the compressor             |
+| DPT2 | Differential Pressure Transducer | M12 4 pin |    PX3005     |         between the inlet and the outlet of the compressor along with the thermocouples         |
+| T12  |           Thermocouple           | M12 4 pin | KMQSS-125U-6  | center of flow probe on the cold side of GT loop after control valves and prior to recuperators |
+| PT2  |    Static Pressure Transducer    |   None    |     None      |                                next the the venturi thermocouple                                |
+| DPT3 | Differential Pressure Transducer |   None    |     None      |                   next the the venturi thermocouple, across the venturi meter                   |
+| RTD1 |               RTD                |   None    |     None      |                                at the inlet of the test section                                 |
+| RTD2 |               RTD                |   None    |     None      |                                at the outlet of the test section                                |
+| PT1  |    Static Pressure Transducer    |   None    |     None      |                                at the inlet of the test section                                 |
+| DPT1 | Differential Pressure Transducer |   None    |     None      |                   next the the venturi thermocouple, across the venturi meter                   |
+| T13  |           Thermocouple           | M12 4 pin | SCAXL-020U-12 |                                          test section                                           |
+| T14  |           Thermocouple           | M12 4 pin | SCAXL-020U-12 |                                          test section                                           |
+| T15  |           Thermocouple           | M12 4 pin | SCAXL-020U-12 |                                          test section                                           |
+| T16  |           Thermocouple           | M12 4 pin | SCAXL-020U-12 |                                          test section                                           |
+| T17  |           Thermocouple           | M12 4 pin | SCAXL-020U-12 |                                          test section                                           |
+| T18  |           Thermocouple           | M12 4 pin | SCAXL-020U-12 |                                          test section                                           |
+| T19  |           Thermocouple           | M12 4 pin | SCAXL-020U-12 |                                          test section                                           |
+| T20  |           Thermocouple           | M12 4 pin | SCAXL-020U-12 |                                          test section                                           |
+| T21  |           Thermocouple           | M12 4 pin | SCAXL-020U-12 |                                          test section                                           |
+| T22  |           Thermocouple           | M12 4 pin | SCAXL-020U-12 |                                          test section                                           |
+| T23  |           Thermocouple           | M12 4 pin | SCAXL-020U-12 |                                at the inlet of the cooling loop                                 |
+| T24  |           Thermocouple           | M12 4 pin | SCAXL-020U-12 |                                at the outlet of the cooling loop                                |
+| FM1  |            Flow Meter            |   None    |     None      |                                At the inlet of the cooling loop                                 |
++------+----------------------------------+-----------+---------------+-------------------------------------------------------------------------------------------------+

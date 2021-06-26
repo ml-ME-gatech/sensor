@@ -1,0 +1,737 @@
+#inlet heater thermocouples
+HeaterInlet1:
+    name: HeaterInlet1
+    id: T1
+    part_number: SCAXL-020U-12
+    manufacturer: Omega
+    installation_date: None
+    location: taped to the outside of the heater inlet lines on heater furthest from test section
+    contact: mlanahan3@gatech.edu
+    type: Thermocouple
+    signal: [C]
+    measure_units: [C]
+    voltage_min: -0.006458
+    voltage_max: 0.033275
+    current_min: minimum current
+    current_max: maximum current
+    measure_min: 0
+    measure_max: 800
+    sample_max: None
+    sample_min: None
+    equation: None
+    uncertainty: 
+        - max
+        - 2.2 [C]
+        - 0.75 [%]
+    interface: M12 4 pin
+
+HeaterInlet2:
+    name: HeaterInlet2
+    id: T2
+    part_number: SCAXL-020U-12
+    manufacturer: Omega
+    installation_date: None
+    location: taped to the outside of the heater inlet lines on heater second furthest from test section
+    contact: mlanahan3@gatech.edu
+    type: Thermocouple
+    signal: [C]
+    measure_units: [C]
+    voltage_min: -0.006458
+    voltage_max: 0.033275
+    current_min: minimum current
+    current_max: maximum current
+    measure_min: 0
+    measure_max: 800
+    sample_max: None
+    sample_min: None
+    equation: None
+    uncertainty: 
+        - max
+        - 2.2 [C]
+        - 0.75 [%]
+    interface: M12 4 pin
+
+HeaterInlet3:
+    name: HeaterInlet3
+    id: T3
+    part_number: SCAXL-020U-12
+    manufacturer: Omega
+    installation_date: None
+    location: taped to the outside of the heater inlet lines on heater second closest to test section
+    contact: mlanahan3@gatech.edu
+    type: Thermocouple
+    signal: [C]
+    measure_units: [C]
+    voltage_min: -0.006458
+    voltage_max: 0.033275
+    current_min: minimum current
+    current_max: maximum current
+    measure_min: 0
+    measure_max: 800
+    sample_max: None
+    sample_min: None
+    equation: None
+    uncertainty: 
+        - max
+        - 2.2 [C]
+        - 0.75 [%]
+    interface: M12 4 pin
+
+HeaterInlet4:
+    name: HeaterInlet4
+    id: T4
+    part_number: SCAXL-020U-12
+    manufacturer: Omega
+    installation_date: None
+    location: taped to the outside of the heater inlet lines on heater closest to test section
+    contact: mlanahan3@gatech.edu
+    type: Thermocouple
+    signal: [C]
+    measure_units: [C]
+    voltage_min: -0.006458
+    voltage_max: 0.033275
+    current_min: minimum current
+    current_max: maximum current
+    measure_min: 0
+    measure_max: 800
+    sample_max: None
+    sample_min: None
+    equation: None
+    uncertainty: 
+        - max
+        - 2.2 [C]
+        - 0.75 [%]
+    interface: M12 4 pin
+
+#heater outlet 
+HeaterOutlet1:
+    name: HeaterOutlet1
+    id: T5
+    part_number: SCAXL-020U-12
+    manufacturer: Omega
+    installation_date: None
+    location: taped to the outside of the heater outlet lines on heater furthest from test section
+    contact: mlanahan3@gatech.edu
+    type: Thermocouple
+    signal: [C]
+    measure_units: [C]
+    voltage_min: -0.006458
+    voltage_max: 0.033275
+    current_min: minimum current
+    current_max: maximum current
+    measure_min: 0
+    measure_max: 800
+    sample_max: None
+    sample_min: None
+    equation: None
+    uncertainty: 
+        - max
+        - 2.2 [C]
+        - 0.75 [%]
+    interface: M12 4 pin
+
+HeaterOutlet2:
+    name: HeaterOutlet2
+    id: T6
+    part_number: SCAXL-020U-12
+    manufacturer: Omega
+    installation_date: None
+    location: taped to the outside of the heater outlet lines on heater second furthest from test section
+    contact: mlanahan3@gatech.edu
+    type: Thermocouple
+    signal: [C]
+    measure_units: [C]
+    voltage_min: -0.006458
+    voltage_max: 0.033275
+    current_min: minimum current
+    current_max: maximum current
+    measure_min: 0
+    measure_max: 800
+    sample_max: None
+    sample_min: None
+    equation: None
+    uncertainty: 
+        - max
+        - 2.2 [C]
+        - 0.75 [%]
+    interface: M12 4 pin
+
+HeaterOutlet3:
+    name: HeaterOutlet3
+    id: T7
+    part_number: SCAXL-020U-12
+    manufacturer: Omega
+    installation_date: None
+    location: taped to the outside of the heater outlet lines on heater second closest to test section
+    contact: mlanahan3@gatech.edu
+    type: Thermocouple
+    signal: [C]
+    measure_units: [C]
+    voltage_min: -0.006458
+    voltage_max: 0.033275
+    current_min: minimum current
+    current_max: maximum current
+    measure_min: 0
+    measure_max: 800
+    sample_max: None
+    sample_min: None
+    equation: None
+    uncertainty: 
+        - max
+        - 2.2 [C]
+        - 0.75 [%]
+    interface: M12 4 pin
+
+HeaterOutlet4:
+    name: HeaterOutlet4
+    id: T8
+    part_number: SCAXL-020U-12
+    manufacturer: Omega
+    installation_date: None
+    location: taped to the outside of the heater outlet lines on heater closest to test section
+    contact: mlanahan3@gatech.edu
+    type: Thermocouple
+    signal: [C]
+    measure_units: [C]
+    voltage_min: -0.006458
+    voltage_max: 0.033275
+    current_min: minimum current
+    current_max: maximum current
+    measure_min: 0
+    measure_max: 800
+    sample_max: None
+    sample_min: None
+    equation: None
+    uncertainty: 
+        - max
+        - 2.2 [C]
+        - 0.75 [%]
+    interface: M12 4 pin
+
+CoolerOutlet:
+    name: CoolerOutlet
+    id: T9
+    part_number: KMQSS-125U-6
+    manufacturer: Omega
+    installation_date: None
+    location: center of flow probe at the outlet of the cooler
+    contact: mlanahan3@gatech.edu
+    type: Thermocouple
+    signal: [C]
+    measure_units: [C]
+    voltage_min: -0.006458
+    voltage_max: 0.044169
+    current_min: minimum current
+    current_max: maximum current
+    measure_min: 0
+    measure_max: 1075
+    sample_max: None
+    sample_min: None
+    equation: None
+    uncertainty: 
+        - max
+        - 2.2 [C]
+        - 0.75 [%]
+    interface: M12 4 pin
+
+#Compressor Sensors
+CompressorInlet:
+    name: CompressorInlet
+    id: T10
+    part_number: KMQSS-125U-12
+    manufacturer: Omega
+    installation_date: None
+    location: center of flow probe at the valve stack at the inlet of the compressor
+    contact: mlanahan3@gatech.edu
+    type: Thermocouple
+    signal: [C]
+    measure_units: [C]
+    voltage_min: -0.006458
+    voltage_max: 0.044169
+    current_min: minimum current
+    current_max: maximum current
+    measure_min: 0
+    measure_max: 1075
+    sample_max: None
+    sample_min: None
+    equation: None
+    uncertainty: 
+        - max
+        - 2.2 [C]
+        - 0.75 [%]
+    interface: M12 4 pin
+
+CompressorOutlet:
+    name: CompressorOutlet
+    id: T11
+    part_number: KMQSS-125U-12
+    manufacturer: Omega
+    installation_date: None
+    location: center of flow probe at the valve stack at the outlet of the compressor
+    contact: mlanahan3@gatech.edu
+    type: Thermocouple
+    signal: [C]
+    measure_units: [C]
+    voltage_min: -0.006458
+    voltage_max: 0.044169
+    current_min: minimum current
+    current_max: maximum current
+    measure_min: 0
+    measure_max: 1075
+    sample_max: None
+    sample_min: None
+    equation: None
+    uncertainty: 
+        - max
+        - 2.2 [C]
+        - 0.75 [%]
+    interface: M12 4 pin
+
+CompressorDifferential:
+    name: CompressorDifferential
+    id: DPT2
+    part_number: PX3005
+    manufacturer: Omega
+    installation_date: None
+    location: between the inlet and the outlet of the compressor along with the thermocouples
+    contact: mlanahan3@gatech.edu
+    type: Differential Pressure Transducer
+    signal: [A]
+    voltage_min: 10.5
+    voltage_max: 55
+    current_min: None
+    current_max: None
+    measure_min: None
+    measure_max: None
+    sample_min: None
+    sample_max: 5 [Hz]
+    uncertainty: 0.2 [%] * range
+    measure: [Pa]
+    interface: M12 4 pin
+
+#Venturi Sensors
+VenturiThermocouple:
+    name: VenturiThermocouple
+    id: T12
+    part_number: KMQSS-125U-6
+    manufacturer: Omega
+    installation_date: None
+    location: center of flow probe on the cold side of GT loop after control valves and prior to recuperators
+    contact: mlanahan3@gatech.edu
+    type: Thermocouple
+    signal: [C]
+    measure_units: [C]
+    voltage_min: -0.006458
+    voltage_max: 0.044169
+    current_min: minimum current
+    current_max: maximum current
+    measure_min: 0
+    measure_max: 1075
+    sample_max: None
+    sample_min: None
+    equation: None
+    uncertainty: 
+        - max
+        - 2.2 [C]
+        - 0.75 [%]
+    interface: M12 4 pin
+
+VenturiStatic:
+    name: VenturiStatic
+    id: PT2
+    part_number: None
+    manufacturer: None
+    installation_date: None
+    location: next the the venturi thermocouple
+    contact: mlanahan3@gatech.edu
+    type: Static Pressure Transducer
+    signal: [V]
+    measure_units: [Pa]
+    uncertainty: None
+    equation: None
+    interface: None
+
+VenturiDifferential:
+    name: VenturiDifferential
+    id: DPT3
+    part_number: None
+    manufacturer: None
+    installation_date: None
+    location: next the the venturi thermocouple, across the venturi meter
+    contact: mlanahan3@gatech.edu
+    type: Differential Pressure Transducer
+    signal: [V]
+    measure_units: [Pa]
+    uncertainty: None
+    equation: None
+    interface: None
+
+#Test Section Sensors
+TestSectionInletRTD:
+    name: TestSectionInletRTD
+    part_number: None
+    id: RTD1
+    equation: None
+    location: at the inlet of the test section
+    measure_units: [C]
+    type: RTD
+    interface: None
+
+TestSectionOutletRTD:
+    name: TestSectionOutletRTD
+    part_number: None
+    id: RTD2
+    equation: None
+    location: at the outlet of the test section
+    measure_units: [C]
+    type: RTD
+    interface: None
+
+TestSectionPressureTransducer:
+    name: TestSectionPressureTransducer
+    part_number: None
+    id: PT1
+    equation: None
+    location: at the inlet of the test section
+    measure_units: [Pa]
+    type: Static Pressure Transducer
+    interface: None
+
+TestSectionDifferential:
+    name: TestSectionDifferential
+    id: DPT1
+    part_number: None
+    manufacturer: None
+    installation_date: None
+    location: next the the venturi thermocouple, across the venturi meter
+    contact: mlanahan3@gatech.edu
+    type: Differential Pressure Transducer
+    signal: [V]
+    measure_units: [Pa]
+    uncertainty: None
+    equation: None
+    interface: None
+
+TestSectionThermocouple1:
+    name: TestSectionThermocouple1
+    id: T13
+    part_number: SCAXL-020U-12
+    manufacturer: Omega
+    installation_date: None
+    location: test section
+    contact: mlanahan3@gatech.edu
+    type: Thermocouple
+    signal: [C]
+    measure_units: [C]
+    voltage_min: -0.006458
+    voltage_max: 0.033275
+    current_min: minimum current
+    current_max: maximum current
+    measure_min: 0
+    measure_max: 800
+    sample_max: None
+    sample_min: None
+    equation: None
+    uncertainty: 
+        - max
+        - 2.2 [C]
+        - 0.75 [%]
+    interface: M12 4 pin
+
+TestSectionThermocouple2:
+    name: TestSectionThermocouple2
+    id: T14
+    part_number: SCAXL-020U-12
+    manufacturer: Omega
+    installation_date: None
+    location: test section
+    contact: mlanahan3@gatech.edu
+    type: Thermocouple
+    signal: [C]
+    measure_units: [C]
+    voltage_min: -0.006458
+    voltage_max: 0.033275
+    current_min: minimum current
+    current_max: maximum current
+    measure_min: 0
+    measure_max: 800
+    sample_max: None
+    sample_min: None
+    equation: None
+    uncertainty: 
+        - max
+        - 2.2 [C]
+        - 0.75 [%]
+    interface: M12 4 pin
+
+TestSectionThermocouple3:
+    name: TestSectionThermocouple3
+    id: T15
+    part_number: SCAXL-020U-12
+    manufacturer: Omega
+    installation_date: None
+    location: test section
+    contact: mlanahan3@gatech.edu
+    type: Thermocouple
+    signal: [C]
+    measure_units: [C]
+    voltage_min: -0.006458
+    voltage_max: 0.033275
+    current_min: minimum current
+    current_max: maximum current
+    measure_min: 0
+    measure_max: 800
+    sample_max: None
+    sample_min: None
+    equation: None
+    uncertainty: 
+        - max
+        - 2.2 [C]
+        - 0.75 [%]
+    interface: M12 4 pin
+
+TestSectionThermocouple4:
+    name: TestSectionThermocouple4
+    id: T16
+    part_number: SCAXL-020U-12
+    manufacturer: Omega
+    installation_date: None
+    location: test section
+    contact: mlanahan3@gatech.edu
+    type: Thermocouple
+    signal: [C]
+    measure_units: [C]
+    voltage_min: -0.006458
+    voltage_max: 0.033275
+    current_min: minimum current
+    current_max: maximum current
+    measure_min: 0
+    measure_max: 800
+    sample_max: None
+    sample_min: None
+    equation: None
+    uncertainty: 
+        - max
+        - 2.2 [C]
+        - 0.75 [%]
+    interface: M12 4 pin
+
+TestSectionThermocouple5:
+    name: TestSectionThermocouple5
+    id: T17
+    part_number: SCAXL-020U-12
+    manufacturer: Omega
+    installation_date: None
+    location: test section
+    contact: mlanahan3@gatech.edu
+    type: Thermocouple
+    signal: [C]
+    measure_units: [C]
+    voltage_min: -0.006458
+    voltage_max: 0.033275
+    current_min: minimum current
+    current_max: maximum current
+    measure_min: 0
+    measure_max: 800
+    sample_max: None
+    sample_min: None
+    equation: None
+    uncertainty: 
+        - max
+        - 2.2 [C]
+        - 0.75 [%]
+    interface: M12 4 pin
+
+TestSectionThermocouple6:
+    name: TestSectionThermocouple6
+    id: T18
+    part_number: SCAXL-020U-12
+    manufacturer: Omega
+    installation_date: None
+    location: test section
+    contact: mlanahan3@gatech.edu
+    type: Thermocouple
+    signal: [C]
+    measure_units: [C]
+    voltage_min: -0.006458
+    voltage_max: 0.033275
+    current_min: minimum current
+    current_max: maximum current
+    measure_min: 0
+    measure_max: 800
+    sample_max: None
+    sample_min: None
+    equation: None
+    uncertainty: 
+        - max
+        - 2.2 [C]
+        - 0.75 [%]
+    interface: M12 4 pin
+
+TestSectionThermocouple7:
+    name: TestSectionThermocouple7
+    id: T19
+    part_number: SCAXL-020U-12
+    manufacturer: Omega
+    installation_date: None
+    location: test section
+    contact: mlanahan3@gatech.edu
+    type: Thermocouple
+    signal: [C]
+    measure_units: [C]
+    voltage_min: -0.006458
+    voltage_max: 0.033275
+    current_min: minimum current
+    current_max: maximum current
+    measure_min: 0
+    measure_max: 800
+    sample_max: None
+    sample_min: None
+    equation: None
+    uncertainty: 
+        - max
+        - 2.2 [C]
+        - 0.75 [%]
+    interface: M12 4 pin
+
+TestSectionThermocouple8:
+    name: TestSectionThermocouple8
+    id: T20
+    part_number: SCAXL-020U-12
+    manufacturer: Omega
+    installation_date: None
+    location: test section
+    contact: mlanahan3@gatech.edu
+    type: Thermocouple
+    signal: [C]
+    measure_units: [C]
+    voltage_min: -0.006458
+    voltage_max: 0.033275
+    current_min: minimum current
+    current_max: maximum current
+    measure_min: 0
+    measure_max: 800
+    sample_max: None
+    sample_min: None
+    equation: None
+    uncertainty: 
+        - max
+        - 2.2 [C]
+        - 0.75 [%]
+    interface: M12 4 pin
+
+TestSectionThermocouple9:
+    name: TestSectionThermocouple9
+    id: T21
+    part_number: SCAXL-020U-12
+    manufacturer: Omega
+    installation_date: None
+    location: test section
+    contact: mlanahan3@gatech.edu
+    type: Thermocouple
+    signal: [C]
+    measure_units: [C]
+    voltage_min: -0.006458
+    voltage_max: 0.033275
+    current_min: minimum current
+    current_max: maximum current
+    measure_min: 0
+    measure_max: 800
+    sample_max: None
+    sample_min: None
+    equation: None
+    uncertainty: 
+        - max
+        - 2.2 [C]
+        - 0.75 [%]
+    interface: M12 4 pin
+
+TestSectionThermocouple10:
+    name: TestSectionThermocouple10
+    id: T22
+    part_number: SCAXL-020U-12
+    manufacturer: Omega
+    installation_date: None
+    location: test section
+    contact: mlanahan3@gatech.edu
+    type: Thermocouple
+    signal: [C]
+    measure_units: [C]
+    voltage_min: -0.006458
+    voltage_max: 0.033275
+    current_min: minimum current
+    current_max: maximum current
+    measure_min: 0
+    measure_max: 800
+    sample_max: None
+    sample_min: None
+    equation: None
+    uncertainty: 
+        - max
+        - 2.2 [C]
+        - 0.75 [%]
+    interface: M12 4 pin
+
+#Water side sensors
+CoolingLoopInlet:
+    name: CoolingLoopInlet
+    id: T23
+    part_number: SCAXL-020U-12
+    manufacturer: Omega
+    installation_date: None
+    location: at the inlet of the cooling loop
+    contact: mlanahan3@gatech.edu
+    type: Thermocouple
+    signal: [C]
+    measure_units: [C]
+    voltage_min: -0.006458
+    voltage_max: 0.033275
+    current_min: minimum current
+    current_max: maximum current
+    measure_min: 0
+    measure_max: 800
+    sample_max: None
+    sample_min: None
+    equation: None
+    uncertainty: 
+        - max
+        - 2.2 [C]
+        - 0.75 [%]
+    interface: M12 4 pin
+
+CoolingLoopOutlet:
+    name: CoolingLoopOutlet
+    id: T24
+    part_number: SCAXL-020U-12
+    manufacturer: Omega
+    installation_date: None
+    location: at the outlet of the cooling loop
+    contact: mlanahan3@gatech.edu
+    type: Thermocouple
+    signal: [C]
+    measure_units: [C]
+    voltage_min: -0.006458
+    voltage_max: 0.033275
+    current_min: minimum current
+    current_max: maximum current
+    measure_min: 0
+    measure_max: 800
+    sample_max: None
+    sample_min: None
+    equation: None
+    uncertainty: 
+        - max
+        - 2.2 [C]
+        - 0.75 [%]
+    interface: M12 4 pin
+
+CoolingLoopFlowMeter:
+    name: CoolingLoopFlowMeter
+    id: FM1
+    part_number: None
+    uncertainty: None
+    contact: mlanahan3@gatech.edu
+    type: Flow Meter
+    location: At the inlet of the cooling loop
+    equation: None
+    interface: None
