@@ -1,4 +1,5 @@
-from yaml import load as yaml_load, dump as yaml_dump, Loader
+from numpy import lib
+from yaml import load as yaml_load, dump as yaml_dump, Loader, dump_all as yaml_dump_all
 from tabulate import tabulate
 from functools import partial
 from typing import Union
@@ -10,6 +11,7 @@ import os
 import sys
 import ast
 import importlib
+from abc import ABC,abstractmethod
 
 """
 Creation:
@@ -46,6 +48,7 @@ class Sensor(dict):
     convert - converts a supplied signal given as a Series based upon a matching equation in a Sensor class
     calculate_uncertainty - calculates the uncertainty in a signal based upon a supplied Series using the uncertainty property
     """
+    PROPERTIES = ['_Sensor__compiled_converter']
 
     def __init__(self,input_dict:dict):
         
@@ -77,6 +80,19 @@ class Sensor(dict):
         except KeyError:
             raise AttributeError(name)
 
+    def remove_properties(self):
+        
+        _dict = deepcopy(self.__dict__)
+        for key in self.PROPERTIES:
+            del _dict[key]
+        
+        return _dict
+
+    def to_file(self, file = None):
+
+        _write_to_file = {self.__dict__['name']:self.remove_properties()}
+        return _write_sensor_to_file(file,_write_to_file)
+        
     def _check_signal(self,x:pd.Series) -> None:
         """ 
         checks to see if the signal and sensor are related by ensuring that x is a series
@@ -87,7 +103,9 @@ class Sensor(dict):
         if not isinstance(x,pd.Series):
             raise TypeError('sensor conversion only applicable for pd.Series objects')
 
-        if self.id not in x.name and self.name not in x.name:
+        _name,_ = _get_units(x.name,return_variable= True)
+        _name = _name.strip()
+        if self.id != _name and self.name != _name:
             raise ValueError('Cannot verify relationship between sensor with \nid: {} \nname: {} \nand input signal with \nname {}'.format(self.id,self.name,x.name))
 
     def convert(self,x: pd.Series,
@@ -96,6 +114,16 @@ class Sensor(dict):
         convert an input signal x (a pd.Series) based upon the textual equation of the sensor
         checks to make sure that units are consistent, and also that a link between the name of the signal
         and the sensor can be established
+
+        Parameters
+        ----------
+        x : pd.Series 
+            the input signal, with a name with units i.e. "Temperature [C]" or "Current1 [A]"
+
+        Returns
+        ----------
+        y: pd.Series
+            the converted output signal, converted according to the "equation" field in the sensor
         """
 
         self._check_signal(x)
@@ -158,6 +186,7 @@ class Sensor(dict):
         if isinstance(uncertainty,tuple):
             operator,uncertainty = uncertainty
 
+        output_name = x.name
         input_unit,signal_unit,measure_unit = [_get_units(item) for item in [x.name,self.signal,self.measure_units]]
         _useries = []
         for quantifier,unit in uncertainty:
@@ -169,6 +198,7 @@ class Sensor(dict):
                     z = x
                 elif unit == measure_unit and input_unit == signal_unit:
                     z = self.convert(x)
+                    output_name = output_name.replace(input_unit,measure_unit)
                 elif unit == signal_unit and input_unit == measure_unit:
                     raise ValueError('cannot calculate uncertainty for the signal unit: {} when the input unit of x is the measure unit: {}'.format(unit,input_unit))
                 else:
@@ -194,7 +224,7 @@ class Sensor(dict):
         else:
             out =  np.squeeze(df)
 
-        return pd.Series(out,index = x.index,name = x.name)
+        return pd.Series(out,index = x.index,name = output_name)
 
     def to_md(self, file = None) -> str:
 
@@ -245,9 +275,19 @@ class SensorArray(dict):
     calculate_uncertainty- apply the uncertainty according to the uncertainty attribute of each sensor to all signals in a supplied DataFrame
     """
 
-    def __init__(self,*args,**kwargs):
+    PROPERTIES = ['_SensorArray__diagram']
 
-        dict.__init__(self,*args,**kwargs)
+    def __init__(self,sensor_dict):
+        
+        if isinstance(sensor_dict,dict):
+            d,_ = self.dictionary_to_sensor_array(sensor_dict)
+        elif isinstance(sensor_dict,SensorArray):
+            d = sensor_dict 
+        else:
+            raise TypeError('SensorArray may only be instantiated by a dictionary or another SensorArray')
+
+        dict.__init__(self,d)
+        self.__dict__ = d
 
     @property
     def diagram(self):
@@ -348,6 +388,64 @@ class SensorArray(dict):
     def __getattr__(self,name):
         return self.__dict__[name]
 
+    @staticmethod
+    def dictionary_to_sensor_array(idict:dict) -> dict:
+
+        """
+        parses a dictionary into a dictionary with the keys converted to Sensors
+        """
+
+        d = dict.fromkeys(idict.keys())
+        diagram = False
+        for key,value in idict.items():
+            if str(key).lower() != 'diagram':
+                d[key] = Sensor(value)
+            else:
+                diagram = True
+        
+        if diagram:
+            del d['diagram']
+            
+        return d,diagram
+
+    def to_file(self, file: str,
+                      sensor_names = None):
+
+        """
+        write a sensor array to a file
+        """
+        
+        _to_file = self.remove_properties()
+        print(_to_file)
+        if sensor_names is not None:
+            _to_file = self._filter_sensor(_to_file,sensor_names)
+
+        output = []
+        for sensor in _to_file:
+            output.append(sensor.to_file())
+        
+        print(output)
+        _write_sensor_array_to_file(output)
+
+    def remove_properties(self):
+        
+        _dict = deepcopy(self.__dict__)
+        for key in self.PROPERTIES:
+            del _dict[key]
+        
+        return _dict
+    
+    @staticmethod
+    def _filter_sensor(sensor_dict: dict,
+                       names_to_filter: list) -> dict:
+
+        output_dict = deepcopy(sensor_dict)
+        for name in names_to_filter:
+            if name not in sensor_dict:
+                del output_dict[name]
+        
+        return output_dict
+        
     @classmethod
     def from_file(cls,file:str,
                   sensor_names = None):
@@ -357,32 +455,29 @@ class SensorArray(dict):
         the file arument is either a file or buffer/stream , and the optional keyword argument sensor_names allows 
         specification of the sensors to be read. The default behaviour is to read all of the sensors in the file
         """
-
         _read = _read_sensor_array_from_file(file)
-        
         if sensor_names is not None:
             read_ = deepcopy(_read)
-            for name in _read:
-                if name not in sensor_names:
-                    del read_[name]
-
-            _read = read_
-
-        d = dict.fromkeys(_read.keys())
-        diagram = False
-        for key,value in _read.items():
-            if str(key).lower() != 'diagram':
-                d[key] = Sensor(value)
-            else:
-                diagram = True
+            _read = cls._filter_sensor(read_,sensor_names)
         
-        if diagram:
-            del d['diagram']
-
+        d,diagram = cls.dictionary_to_sensor_array(_read)
         _cls = cls(d)
         if diagram:
             _cls.diagram = _read['diagram']
         
+        _cls.__dict__ = d
+        return _cls
+
+    @classmethod
+    def fromkeys(cls,keys:list):
+
+        """
+        overrides the fromkeys method inherent in the dictionary class
+        """
+
+        idict = {key:{} for key in keys}
+        d, diagram = cls.dictionary_to_sensor_array(idict)
+        _cls = cls(d)
         _cls.__dict__ = d
         return _cls
 
@@ -447,13 +542,153 @@ class SensorArray(dict):
 
         return pd.DataFrame(Y).T
 
+class EquationLibraryPath(ABC):
+
+    """
+    Class for handling the adding of paths to the equation library
+    """
+    
+    def __init__(self,paths: Union[str,list]):
+
+        #initialize variables
+        self.paths = self.validate_libary_paths(paths)
+        self.pathlibs = None
+        self.path_to_path_libs = os.path.join(os.path.split(__file__)[0],'data\\conv_libs.txt')
+        
+    @staticmethod
+    def validate_libary_paths(libpaths: Union[str,list]):
+        #check data types
+        if isinstance(libpaths,str):
+            paths = [libpaths]
+        elif isinstance(libpaths,list):
+            paths = libpaths
+
+        #check to make sure paths exist, and make sure that it is a python module
+        for path in paths:
+            if not os.path.exists(path):
+                raise FileNotFoundError('could not find library associated with path: {}'.format(path))
+            _,ext = os.path.splitext(path)
+            if ext != '.py':
+                raise ValueError('libary must be a python module with a .py extension, you have specified the following module: {}'.format(path))
+    
+        return paths
+
+    def filter_paths_from_file(self,pathlibs_to_exclude):
+
+        path_to_path_libs,_ = os.path.split(__file__)
+        write_paths = []
+        with open(self.path_to_path_libs,'r') as file:
+            for line in file.readlines():
+                _f = True
+                for path in pathlibs_to_exclude:
+                    if line.strip('\n') == path:
+                        _f = False
+                
+                if _f:
+                    write_paths.append(line)
+        
+        return write_paths
+                
+    def __enter__(self):
+        self.add_path()
+
+    @abstractmethod
+    def __exit__(self,exc_type, exc_val, exc_tb):
+        pass
+
+    def remove_path(self, lib_paths = None):
+        """
+        remove paths from the path lib. If the previous contents of the file have been recored in the pathlibs variable,
+        just wrtie this. Otherwise, record the lines that need to be removed from the existing file
+        """
+
+        if self.pathlibs is None:
+            if lib_paths is not None:
+                self.paths += self.validate_libary_paths(lib_paths)
+            
+            write_paths = self.filter_paths_from_file(self.paths)
+        else:
+            write_paths = self.pathlibs
+        
+        with open(self.path_to_path_libs,'w') as file:
+            file.write(''.join(write_paths))
+
+    def add_path(self):
+
+        """
+        add paths to the libpath file. check to make sure that the paths are not already in the file
+        and then append each new path to the end of the file
+        """
+        
+        self.pathlibs = []
+        _write = dict.fromkeys(self.paths)
+        for key in _write:
+            _write[key] = True
+        
+        with open(self.path_to_path_libs,'r') as file:
+            for line in file.readlines():
+                for path in self.paths:
+                    if line.strip('\n') == path:
+                        _write[path] = False
+                else:
+                    self.pathlibs.append(line)
+
+        with open(self.path_to_path_libs,'a') as file:
+            for key in _write:
+                if _write[key]:
+                    file.writelines(str(key)+'\n')
+        
+class TemporaryEquationLibraryPath(EquationLibraryPath):
+
+    """
+    Inherited class for handling the tempory adding of paths to the equation library
+    """
+
+    def __init__(self,path):
+
+        super().__init__(path)
+
+    def __exit__(self,exc_type, exc_val, exc_tb):
+        self.remove_path()
+
+class PermanentEquationLibraryPath(EquationLibraryPath):
+
+    """
+    Inherited class for handling the permanent adding of paths to the equation library
+    """
+
+    def __init__(self,path):
+
+        super().__init__(path)
+
+    def __exit__(self,exc_type, exc_val, exc_tb):
+        pass
+
+def add_conversion_library(library_name):
+
+    """
+    convenience function for adding an equation library
+    """
+    
+    with PermanentEquationLibraryPath(library_name) as file:
+        pass
+
+def remove_conversion_library(library_name):
+
+    """
+    conveinience function for removing an equation library
+    """
+    
+    context_manager = TemporaryEquationLibraryPath([])
+    context_manager.remove_path(lib_paths = library_name)
+
 def _get_conversion_libs():
 
     libs = []
     path,_ = os.path.split(__file__)
     with open(os.path.join(path,'data\\conv_libs.txt'),'r') as file:
         for line in file.readlines():
-            path = os.path.normpath(line)
+            path = os.path.normpath(line.strip('\n'))
             _,ext = os.path.splitext(path)
             if ext == '.py':
                 if os.path.exists(path):
@@ -507,20 +742,59 @@ def _exclude_keys(input_dict:dict,
 
     return input_dict
 
+def yaml_file_handler(function: callable,
+                      *args,
+                      **kwargs) -> callable:
+
+    """ 
+    decorator function for wrapping a yaml module to more easily handle the different cases of 
+    str file paths or streams ect...
+    """
+    
+    def wrapper(file: str,
+                access_mode: str,
+                data):
+
+        def _yaml_handler(f):
+            if data is None and f is not None:
+                output = function(f,*args,**kwargs)
+            elif data is not None and f is None:
+                output = function(data,*args,**kwargs)
+            else:
+                output = function(data,f,*args,**kwargs)
+            
+            return output
+        
+        if isinstance(file,str):
+            with open(file,access_mode) as f:
+                return _yaml_handler(f)
+        else:
+            return _yaml_handler(file)
+
+    return wrapper
+
 def _read_sensor_array_from_file(file: str) -> dict:
     """
     light wrapping of the load function from pyyaml. may have to add more to this later
     if I decide to be more clever with the formatting of the sensor file
     """
+    function = yaml_file_handler(yaml_load,Loader =Loader)
+    return function(file,'r', None)
 
-    if isinstance(file,str):
-        with open(file,'r') as f:
-            data = yaml_load(f, Loader = Loader)
+def _write_sensor_to_file(file:str,
+                          data: dict) -> None:
 
-    else:
-        data = yaml_load(file, Loader = Loader)
+    """
+    light wrapping of the dump function pyyaml. May have to add more to this later
+    """
+    function = yaml_file_handler(yaml_dump)
+    return function(file,'w',data)
 
-    return data
+def _write_sensor_array_to_file(file:str,
+                                data:dict) -> None:
+
+    function = yaml_file_handler(yaml_dump_all)
+    return function(file,'w',data)
 
 def _sensor_equation_compiler(string: str) -> callable:
     """
@@ -616,7 +890,7 @@ def _library_sensor_equation(string:str) -> callable:
 
     #parses the contents of a python module using the Abstract Syntax Tree Library
     def _ast_parser(fname):
-        with open(fname,'rt') as file:
+        with open(fname,'r') as file:
             return ast.parse(file.read(),filename = fname)
 
     #the importer function if the supplied equation is found

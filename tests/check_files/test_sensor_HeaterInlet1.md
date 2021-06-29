@@ -1,0 +1,6 @@
+- name: HeaterInlet1
+- id: T1
+- signal: ['V']
+- measure_units: ['C']
+- equation: <typeK_thermocouple>
+- uncertainty: ['max', '2.2 [C]', '0.75 [%]']

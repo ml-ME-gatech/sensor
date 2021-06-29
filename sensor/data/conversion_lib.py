@@ -51,20 +51,7 @@ def typeK_thermocouple(array):
 
     return thermocouple_conversion(array,'K')
 
-def main():
+def test_equation_for_library_management_check_12305912350981235(input_number: int) -> int:
 
-    from matplotlib import pyplot as plt
-
-    k_type = np.linspace(-6.458,54.886,1643*10)
-    temperature = typeK_thermocouple(k_type*1e-3)
-    print(temperature)
-    fig,ax = plt.subplots()
-    ax.set_xlabel('Voltage [mV]',fontsize = 14)
-    ax.set_ylabel('Temperature [C]',fontsize = 14)
-    ax.plot(k_type,temperature,color = 'blue')
-    plt.show()
-
-if __name__ == '__main__':
-    main()
-
+    return input_number
 
