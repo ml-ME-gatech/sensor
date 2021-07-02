@@ -48,9 +48,8 @@ class TestClassInstantation(unittest.TestCase):
 
     def test_write_array_method(self):
 
-        check_write_array = 'check_files\\check_write_sensor.yaml'
+        check_write_array = 'check_files\\check_write_array.yaml'
         sensor_array = SensorArray.from_file(self.file)
-        print(sensor_array)
         sensor_array.to_file(check_write_array)
         check_sensor_array = SensorArray.from_file(check_write_array)
 

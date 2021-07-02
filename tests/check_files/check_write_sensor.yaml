@@ -1,12 +1,12 @@
 HeaterInlet1:
-  equation: <typeK_thermocouple>
-  id: T1
-  measure_units:
-  - C
-  name: HeaterInlet1
-  signal:
-  - V
-  uncertainty:
-  - max
-  - 2.2 [C]
-  - 0.75 [%]
+    equation: <typeK_thermocouple>
+    id: T1
+    measure_units:
+    - C
+    name: HeaterInlet1
+    signal:
+    - V
+    uncertainty:
+    - max
+    - 2.2 [C]
+    - 0.75 [%]

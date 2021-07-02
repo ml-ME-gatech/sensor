@@ -12,6 +12,7 @@ import sys
 import ast
 import importlib
 from abc import ABC,abstractmethod
+from uncertainties import unumpy
 
 """
 Creation:
@@ -20,7 +21,7 @@ Date: 06.16.2021
 
 Last Edit: 
 Editor(s): Michael Lanahan
-Date: 06.24.2021
+Date: 06.29.2021
 
 -- Description -- 
 classes for working with sensor.yaml files specified format in the sensor_fmt.yaml file
@@ -36,7 +37,10 @@ class Sensor(dict):
 
     Attributes
     ----------
-    attributes are read from sensor files
+    attributes are read from sensor files. Attributes specific in the class include:
+    
+    compiled_converter: the result of the _sensor_equation_compiler of the provided "equation" in the file
+
 
     Methods
     ----------
@@ -59,8 +63,11 @@ class Sensor(dict):
     @property
     def compiled_converter(self):
         if self.__compiled_converter is None:
-            self.__compiled_converter =  _sensor_equation_compiler(self.__dict__['equation'])
-       
+            try:
+                self.__compiled_converter =  _sensor_equation_compiler(self.__dict__['equation'])
+            except (KeyError,AttributeError):
+                raise AttributeError('sensor: {} has failed to specify an equation and a converter may not be compiled'.format(str(self)))
+
         return self.__compiled_converter
 
     @compiled_converter.setter
@@ -84,14 +91,25 @@ class Sensor(dict):
         
         _dict = deepcopy(self.__dict__)
         for key in self.PROPERTIES:
-            del _dict[key]
+            try:
+                del _dict[key]
+            except KeyError:
+                pass
         
         return _dict
 
-    def to_file(self, file = None):
+    def to_file(self, file = None, 
+                      dict_representation = False):
+
+        """
+        return the dictionary representation suitable for writing to a file
+        """
 
         _write_to_file = {self.__dict__['name']:self.remove_properties()}
-        return _write_sensor_to_file(file,_write_to_file)
+        if dict_representation:
+            return _write_to_file
+        else:
+            return _write_sensor_to_file(file,_write_to_file)
         
     def _check_signal(self,x:pd.Series) -> None:
         """ 
@@ -253,6 +271,19 @@ class Sensor(dict):
 
         return txt
 
+    def uSeries(self,x:pd.Series) -> pd.Series:
+
+        """
+        merging function between the computation of the sensor uncertainty and the uncertainties package
+        """
+        return pd.Series(self.uArray(x), 
+                         index = x.index, name = x.name)
+
+    def uArray(self,x:pd.Series) -> unumpy.uarray:
+        
+        return unumpy.uarray(x.to_numpy(),self.calculate_uncertainty(x).to_numpy())
+        
+
 class SensorArray(dict):
     """ 
     SensorArray
@@ -264,7 +295,8 @@ class SensorArray(dict):
 
     Attributes
     ----------
-    attributes are read from sensor files
+    attributes are read from sensor files. Each Sensor that makes up the sensor array may be interpreted as an attribute.
+    The only permanent attribute is the 'diagram' property which is intended to hold diagram files
 
     Methods
     ----------
@@ -273,6 +305,9 @@ class SensorArray(dict):
     from_file - class method that reads in a SensorArray from a file - in yaml format
     convert- apply the conversion according to the sensor equation to all signals in a supplied DataFrame
     calculate_uncertainty- apply the uncertainty according to the uncertainty attribute of each sensor to all signals in a supplied DataFrame
+    to_file - write the sensorarray to a file in yaml format
+    fromkeys - class method that essentially does the same thing as the dictionary fromkeys method
+                with conversion of the sensors to Sensor class
     """
 
     PROPERTIES = ['_SensorArray__diagram']
@@ -299,6 +334,10 @@ class SensorArray(dict):
 
     def to_md(self,file = None) -> str:
         
+        """
+        convert a sensorarray yaml information block into a markdown format. returns a string
+        """
+
         txt_list = []
         for key,value in self.__dict__.items():
             txt_list.append('# ' + str(key) + '\n' + value.to_md() + '\n')
@@ -316,6 +355,11 @@ class SensorArray(dict):
     def sensor_columns(self,
                             table_dict:dict,
                             headerfmt: str) -> list:
+        """
+        return the sensorarray as a list that can be handled using the tabulate package
+        using the different sensors as column headers with the heading attribute specified in
+        headerfmt
+        """
 
         rows = _get_unique_entries(table_dict)
         headers = [item[headerfmt] for item in self.__dict__.values()]
@@ -335,6 +379,11 @@ class SensorArray(dict):
     def attribute_columns(self,
                                 table_dict:dict,
                                 headerfmt:str) -> list:
+
+        """
+        return the sensorarray as a list that can be handled using the tabulate package, using the 
+        different attributes specified in headermft as the column header
+        """
 
         headers = list(_get_unique_entries(table_dict))
         table_list = []
@@ -359,11 +408,18 @@ class SensorArray(dict):
         convinience function to throw the sensor array into a table by sorting the underlying dictionary
         according to some limited parameters described below
 
+        Parameters
+        ----------
         include: specifies sensor properties to include in table, 
         exclude: key word specifies properties to exclude from table.
         tablefmt: feeds into tabulate function from tabulate package
         headerfmt: specifies what property to use as the header from the sensor array. 
         kwargs: fed into the tabulate function
+
+        Returns
+        ---------
+        output from the tabulate function, a part of the tabulate package. this returns a string
+        representation of the requested table
         """
 
         mydict = deepcopy(dict(self.__dict__))
@@ -408,7 +464,7 @@ class SensorArray(dict):
             
         return d,diagram
 
-    def to_file(self, file: str,
+    def to_file(self, file = None,
                       sensor_names = None):
 
         """
@@ -416,28 +472,34 @@ class SensorArray(dict):
         """
         
         _to_file = self.remove_properties()
-        print(_to_file)
         if sensor_names is not None:
             _to_file = self._filter_sensor(_to_file,sensor_names)
 
-        output = []
-        for sensor in _to_file:
-            output.append(sensor.to_file())
+        output = dict.fromkeys(_to_file.keys())
+        for sensor,sensor_attributes in _to_file.items():
+            output[sensor] = sensor_attributes.to_file(dict_representation = True)[sensor]
         
-        print(output)
-        _write_sensor_array_to_file(output)
+        _write_sensor_to_file(file,output)
 
     def remove_properties(self):
-        
+        """
+        remove properties that are not supposed to be a part of the sensorarray to file representation
+        """
         _dict = deepcopy(self.__dict__)
         for key in self.PROPERTIES:
-            del _dict[key]
+            try:
+                del _dict[key]
+            except KeyError:
+                pass
         
         return _dict
     
     @staticmethod
     def _filter_sensor(sensor_dict: dict,
                        names_to_filter: list) -> dict:
+        """
+        filter names of the sensor i.e. only select specific sensors from the representative dictionary
+        """
 
         output_dict = deepcopy(sensor_dict)
         for name in names_to_filter:
@@ -534,6 +596,7 @@ class SensorArray(dict):
         """
         applies the Sensor.calculate_uncertainty method to every column in X - the array of signals where each column is a different signal
         """
+
         mc = self._map_columns_to_sensor_array(X)
 
         Y = []
@@ -541,6 +604,25 @@ class SensorArray(dict):
             Y.append(sensor.calculate_uncertainty(X[column]))
 
         return pd.DataFrame(Y).T
+
+    def uDataFrame(self,X:pd.DataFrame,**kwargs) -> pd.DataFrame:
+        
+        """
+        hook from uncertainties package to pandas DataFrame object
+        """
+
+        return pd.DataFrame(self.uArray(X), 
+                         index = X.index, columns = X.columns)
+
+
+    def uArray(self,X:pd.DataFrame,**kwargs) -> pd.DataFrame:
+
+        """
+        cast signal into an uncertainties array
+        """ 
+
+        return unumpy.uarray(X.to_numpy(),self.calculate_uncertainty(X).to_numpy())
+
 
 class EquationLibraryPath(ABC):
 
@@ -557,6 +639,11 @@ class EquationLibraryPath(ABC):
         
     @staticmethod
     def validate_libary_paths(libpaths: Union[str,list]):
+
+        """
+        make sure the library paths are valid by checking if they exist, and that they are python modules
+        """
+
         #check data types
         if isinstance(libpaths,str):
             paths = [libpaths]
@@ -574,6 +661,9 @@ class EquationLibraryPath(ABC):
         return paths
 
     def filter_paths_from_file(self,pathlibs_to_exclude):
+        """
+        filter paths from the list of libraries contained in the conv_libs.txt file
+        """
 
         path_to_path_libs,_ = os.path.split(__file__)
         write_paths = []
@@ -642,6 +732,7 @@ class TemporaryEquationLibraryPath(EquationLibraryPath):
 
     """
     Inherited class for handling the tempory adding of paths to the equation library
+    as we can see, the added path is removed upon exit of the contextmanager 
     """
 
     def __init__(self,path):
@@ -654,7 +745,8 @@ class TemporaryEquationLibraryPath(EquationLibraryPath):
 class PermanentEquationLibraryPath(EquationLibraryPath):
 
     """
-    Inherited class for handling the permanent adding of paths to the equation library
+    Inherited class for handling the permanent adding of paths to the equation library. No action is taken
+    upon exit of the contextmanager
     """
 
     def __init__(self,path):
@@ -664,7 +756,7 @@ class PermanentEquationLibraryPath(EquationLibraryPath):
     def __exit__(self,exc_type, exc_val, exc_tb):
         pass
 
-def add_conversion_library(library_name):
+def add_conversion_library(library_name) -> None:
 
     """
     convenience function for adding an equation library
@@ -673,32 +765,37 @@ def add_conversion_library(library_name):
     with PermanentEquationLibraryPath(library_name) as file:
         pass
 
-def remove_conversion_library(library_name):
+def remove_conversion_library(library_name) -> None:
 
     """
     conveinience function for removing an equation library
     """
     
-    context_manager = TemporaryEquationLibraryPath([])
-    context_manager.remove_path(lib_paths = library_name)
+    TemporaryEquationLibraryPath([]).remove_path(lib_paths = library_name)
 
 def _get_conversion_libs():
+
+    """
+    get available conversion libraries listed in:
+    .data/conv_libs.txt
+
+    check to make sure the libraries are python modules, and that they exist
+    """
 
     libs = []
     path,_ = os.path.split(__file__)
     with open(os.path.join(path,'data\\conv_libs.txt'),'r') as file:
         for line in file.readlines():
-            path = os.path.normpath(line.strip('\n'))
-            _,ext = os.path.splitext(path)
-            if ext == '.py':
-                if os.path.exists(path):
-                    libs.append(path)
-                else:
-                    cwd = os.getcwd()
-                    _path = os.path.join(path,cwd)
-                    if os.path.exists(_path):
-                        libs.append(_path)
+            library_path = os.path.normpath(line.strip('\n'))
+            if os.path.exists(library_path):
+                library_path = os.path.abspath(library_path)
+            else:
+                library_path = os.path.join(path,library_path)
 
+            _,ext = os.path.splitext(library_path)
+            if ext == '.py' and os.path.exists(library_path):
+                libs.append(library_path)
+    
     return libs
 
 def _get_unique_entries(table:dict) -> set:
@@ -747,13 +844,13 @@ def yaml_file_handler(function: callable,
                       **kwargs) -> callable:
 
     """ 
-    decorator function for wrapping a yaml module to more easily handle the different cases of 
+    wrapper function for wrapping a yaml module to more easily handle the different cases of 
     str file paths or streams ect...
     """
     
-    def wrapper(file: str,
-                access_mode: str,
-                data):
+    def yaml_wrapped(file: str,
+                    access_mode: str,
+                    data):
 
         def _yaml_handler(f):
             if data is None and f is not None:
@@ -771,13 +868,15 @@ def yaml_file_handler(function: callable,
         else:
             return _yaml_handler(file)
 
-    return wrapper
+    return yaml_wrapped
 
 def _read_sensor_array_from_file(file: str) -> dict:
+    
     """
     light wrapping of the load function from pyyaml. may have to add more to this later
     if I decide to be more clever with the formatting of the sensor file
     """
+
     function = yaml_file_handler(yaml_load,Loader =Loader)
     return function(file,'r', None)
 
@@ -787,14 +886,10 @@ def _write_sensor_to_file(file:str,
     """
     light wrapping of the dump function pyyaml. May have to add more to this later
     """
-    function = yaml_file_handler(yaml_dump)
+
+    function = yaml_file_handler(yaml_dump, indent = 4,line_break = 2)
     return function(file,'w',data)
 
-def _write_sensor_array_to_file(file:str,
-                                data:dict) -> None:
-
-    function = yaml_file_handler(yaml_dump_all)
-    return function(file,'w',data)
 
 def _sensor_equation_compiler(string: str) -> callable:
     """
@@ -881,6 +976,18 @@ def _library_sensor_equation(string:str) -> callable:
     so that it is specified as <equation_name> this function will parse through all conv_libs.txt
     python modules and attempt to find a matching function to this name. If not matching function is
     found, an error will be raised
+
+    Parameters
+    ----------
+    string: str
+            a string specifying the equation in <equation_name> format. The location of this
+            equation MUST be specified in the conv_libs.txt file otherwise the compiler will 
+            not be able to find it
+
+    Returns
+    ----------
+    callable:
+            a callable item 
     """
 
     #get the equation name we are looking for 

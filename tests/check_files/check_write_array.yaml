@@ -1,0 +1,66 @@
+HeaterInlet1:
+    equation: <typeK_thermocouple>
+    id: T1
+    measure_units:
+    - C
+    name: HeaterInlet1
+    signal:
+    - V
+    uncertainty:
+    - max
+    - 2.2 [C]
+    - 0.75 [%]
+HeaterInlet2:
+    equation: <typeK_thermocouple>
+    id: T2
+    measure_units:
+    - C
+    name: HeaterInlet2
+    signal:
+    - V
+    uncertainty:
+    - max
+    - 2.2 [C]
+    - 0.75 [%]
+HeaterInlet3:
+    equation: <typeK_thermocouple>
+    id: T3
+    measure_units:
+    - C
+    name: HeaterInlet3
+    signal:
+    - V
+    uncertainty:
+    - max
+    - 2.2 [C]
+    - 0.75 [%]
+HeaterInlet4:
+    equation: <typeK_thermocouple>
+    id: T4
+    measure_units:
+    - C
+    name: HeaterInlet4
+    signal:
+    - V
+    uncertainty:
+    - max
+    - 2.2 [C]
+    - 0.75 [%]
+PressureDifferential:
+    equation: np.sqrt(y) = 50.0*x + 14.0
+    id: DP1
+    measure_units:
+    - Pa
+    name: PressureDifferential
+    signal:
+    - A
+    uncertainty: 40 [Pa]
+StaticPressureVenturi:
+    equation: y = 150.55*x + 45.666
+    id: P1
+    measure_units:
+    - Pa
+    name: StaticPressureVenturi
+    signal:
+    - A
+    uncertainty: 40 [Pa]

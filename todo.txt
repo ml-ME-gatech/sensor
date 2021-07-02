@@ -5,8 +5,8 @@ Development:
 	- [X] add equation library
 		- [X] temporarily
 		- [X] permanently
-	- write Sensor to yaml
-	- write SensorArray to yaml
+	- [X] write Sensor to yaml
+	- [X] write SensorArray to yaml
 	- convert date field to datetime index
 Tests:
 	- [X] Reporting Tests
