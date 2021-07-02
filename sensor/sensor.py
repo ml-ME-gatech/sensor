@@ -21,11 +21,13 @@ Date: 06.16.2021
 
 Last Edit: 
 Editor(s): Michael Lanahan
-Date: 06.29.2021
+Date: 07.02.2021
 
 -- Description -- 
 classes for working with sensor.yaml files specified format in the sensor_fmt.yaml file
 """
+
+RESERVED_ARRAY_NAMES = ['diagram']
 
 class Sensor(dict): 
     """ 
@@ -247,7 +249,8 @@ class Sensor(dict):
     def to_md(self, file = None) -> str:
 
         """
-        Creates a bulleted markdown document containing the sensor information
+        Creates a bulleted markdown document containing the sensor information. Ignore "private" properties
+        with _ the first character of the name
         
         Parameters
         ----------
@@ -255,12 +258,7 @@ class Sensor(dict):
         the file to write the markdown summary to
         """
 
-        txt_list = []
-        for key,value in self.__dict__.items():
-            name = str(key)
-            if name[0] != '_':
-                txt_list.append('- ' + name + ': ' + str(value) + '\n')
-
+        txt_list = ['- ' + str(key) + ': ' + str(value) + '\n' for key,value in self.__dict__.items() if str(key)[0] != '_']
         txt = ''.join(txt_list)
         if file is not None:
             if isinstance(file,str):
@@ -338,11 +336,9 @@ class SensorArray(dict):
         convert a sensorarray yaml information block into a markdown format. returns a string
         """
 
-        txt_list = []
-        for key,value in self.__dict__.items():
-            txt_list.append('# ' + str(key) + '\n' + value.to_md() + '\n')
-        
+        txt_list = ['# ' + str(key) + '\n' + value.to_md() + '\n' for key,value in self.__dict__.items()]
         txt = ''.join(txt_list)
+        
         if file is not None:
             if isinstance(file,str):
                 with open(file,'w') as f:
@@ -442,7 +438,10 @@ class SensorArray(dict):
         return tabulate(table_list,headers = headers,tablefmt = tablefmt ,**kwargs)
 
     def __getattr__(self,name):
-        return self.__dict__[name]
+        try:
+            return self.__dict__[name]
+        except KeyError:
+            raise AttributeError(name)
 
     @staticmethod
     def dictionary_to_sensor_array(idict:dict) -> dict:
@@ -451,19 +450,12 @@ class SensorArray(dict):
         parses a dictionary into a dictionary with the keys converted to Sensors
         """
 
-        d = dict.fromkeys(idict.keys())
-        diagram = False
-        for key,value in idict.items():
-            if str(key).lower() != 'diagram':
-                d[key] = Sensor(value)
-            else:
-                diagram = True
-        
-        if diagram:
-            del d['diagram']
-            
-        return d,diagram
-
+        d = {key:Sensor(value) for key,value in idict.items() if str(key).lower() not in RESERVED_ARRAY_NAMES}
+        if 'diagram' in d:
+            return d,True
+        else:
+            return d,False
+    
     def to_file(self, file = None,
                       sensor_names = None):
 
@@ -475,10 +467,7 @@ class SensorArray(dict):
         if sensor_names is not None:
             _to_file = self._filter_sensor(_to_file,sensor_names)
 
-        output = dict.fromkeys(_to_file.keys())
-        for sensor,sensor_attributes in _to_file.items():
-            output[sensor] = sensor_attributes.to_file(dict_representation = True)[sensor]
-        
+        output = {key:value.to_file(dict_representation = True)[key] for key,value in _to_file.items()}
         _write_sensor_to_file(file,output)
 
     def remove_properties(self):
@@ -501,12 +490,7 @@ class SensorArray(dict):
         filter names of the sensor i.e. only select specific sensors from the representative dictionary
         """
 
-        output_dict = deepcopy(sensor_dict)
-        for name in names_to_filter:
-            if name not in sensor_dict:
-                del output_dict[name]
-        
-        return output_dict
+        return {key:value for key,value in sensor_dict.items() if str(key) in names_to_filter}
         
     @classmethod
     def from_file(cls,file:str,
@@ -538,7 +522,7 @@ class SensorArray(dict):
         """
 
         idict = {key:{} for key in keys}
-        d, diagram = cls.dictionary_to_sensor_array(idict)
+        d, _ = cls.dictionary_to_sensor_array(idict)
         _cls = cls(d)
         _cls.__dict__ = d
         return _cls
@@ -551,22 +535,30 @@ class SensorArray(dict):
         i.e. two sensors map to the same column of the data frame
         """
 
-        mapped_columns = dict.fromkeys(X.columns)
-        #initiaze mapped columns to all None
-        for c in X.columns:
-            mapped_columns[c] = None
-
-        #determine the mapping from signal to sensors
-        for column in X.columns:
-            for sensor_name,sensor in self.__dict__.items():
+        def _sig_to_sense_filter(column, mapped_columns):
+            """
+            filter the mapping from signal to sensor
+            """
+            def _matching_comparison(column,sensor_name,sensor):
+                """
+                the condition to determine matching between signal and sensor
+                """
                 _sensor_name = sensor_name.strip()
-                _column,_ = _get_units(column,return_variable = True)
-                _column = _column.strip()
+                _column = _get_units(column,return_variable = True)[0].strip()
                 if _sensor_name == _column or sensor.id == _column:
                     if mapped_columns[column] is None:
                         mapped_columns[column] = sensor
                     else:
                         raise ValueError("Sensors {} and {} both map to column {} in DataFrame".format(sensor_name,mapped_columns[column],column))
+            
+            #iterate over all the sensors
+            for sensor_name,sensor in self.__dict__.items():
+                _matching_comparison(column,sensor_name,sensor)
+        
+        #determine the mapping from signal to sensors
+        mapped_columns = {c: None for c in X.columns}
+        for column in X.columns:
+            _sig_to_sense_filter(column,mapped_columns)
 
         
         #determine if there are extra signals
