@@ -222,7 +222,7 @@ class Sensor(dict):
                 elif unit == signal_unit and input_unit == measure_unit:
                     raise ValueError('cannot calculate uncertainty for the signal unit: {} when the input unit of x is the measure unit: {}'.format(unit,input_unit))
                 else:
-                    raise ValueError('uncertainty unit {} does not match either input signal (x) unit: {} or the measure unit '.format(unit,input_unit))
+                    raise ValueError('uncertainty unit {} does not match either input signal ({}) unit: {} or the measure unit '.format(unit,x.name,input_unit))
                 
                 if callable(quantifier):
                     uncertainty_quantification = quantifier(z)
@@ -242,7 +242,7 @@ class Sensor(dict):
         if operator is not None:
             out = np.array(operator(df,axis = 0))
         else:
-            out =  np.squeeze(df)
+            out =  np.squeeze(np.array(df))
 
         return pd.Series(out,index = x.index,name = output_name)
 

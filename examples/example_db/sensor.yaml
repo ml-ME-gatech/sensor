@@ -1,0 +1,225 @@
+Pbypass:
+    channel: '117'
+    date: 6/26/2017 3:43:39 PM
+    equation: 498.76*y + -500.317
+    id: Pbypass
+    measure_units: [PSI]
+    name: Pbypass
+    range: Auto
+    reponsible: Bailey
+    signal: [A]
+    type: Pressure Transducer
+    uncertainty: 0 [PSI]
+Preturn:
+    channel: '209'
+    date: 6/26/2017 3:43:39 PM
+    equation: 497.9532*y + -497.5415
+    id: Preturn
+    measure_units: [PSI]
+    name: Preturn
+    range: Auto
+    reponsible: Bailey
+    signal: [A]
+    type: Pressure Transducer
+    uncertainty: 12 [PSI]
+Ptest:
+    channel: '222'
+    date: 6/26/2017 3:43:39 PM
+    equation: 93750*y + -375
+    id: Ptest
+    measure_units: [PSI]
+    name: Ptest
+    range: 1 A
+    reponsible: Bailey
+    signal: [A]
+    type: Pressure Transducer
+    uncertainty: 5 [PSI]
+Pvent:
+    channel: '122'
+    date: 6/26/2017 3:43:39 PM
+    equation: 124867*y + -500.968
+    id: Pvent
+    measure_units: [PSI]
+    name: Pvent
+    range: Auto
+    reponsible: Bailey
+    signal: [A]
+    type: Pressure Transducer
+    uncertainty: 5 [PSI]
+T2:
+    channel: '108'
+    date: 6/26/2017 3:43:39 PM
+    equation: <typeK_thermocouple>
+    id: T2
+    measure_units: [C]
+    name: T2
+    range: None
+    reponsible: Bailey
+    signal: [V]
+    type: thermocouple
+    uncertainty:
+    - 1.1 [C]
+    - 0.4 [%]
+    - max
+T4:
+    channel: '107'
+    date: 6/26/2017 3:43:39 PM
+    equation: <typeK_thermocouple>
+    id: T4
+    measure_units: [C]
+    name: T4
+    range: None
+    reponsible: Bailey
+    signal: [V]
+    type: thermocouple
+    uncertainty:
+    - 1.1 [C]
+    - 0.4 [%]
+    - max
+T6:
+    channel: '106'
+    date: 6/26/2017 3:43:39 PM
+    equation: <typeK_thermocouple>
+    id: T6
+    measure_units: [C]
+    name: T6
+    range: None
+    reponsible: Bailey
+    signal: [V]
+    type: thermocouple
+    uncertainty:
+    - 1.1 [C]
+    - 0.4 [%]
+    - max
+Tbypass:
+    channel: '201'
+    date: 6/26/2017 3:43:39 PM
+    equation: <typeK_thermocouple>
+    id: Tbypass
+    measure_units: [K]
+    name: Tbypass
+    range: None
+    reponsible: Bailey
+    signal: [V]
+    type: thermocouple
+    uncertainty:
+    - 1.1 [K]
+    - y = 0.004*(x-273.15) [K]
+    - max
+Tin:
+    channel: '205'
+    date: 6/26/2017 3:43:39 PM
+    equation: null
+    id: Tin
+    measure_units: [C]
+    name: Tin
+    range: None
+    reponsible: Bailey
+    signal: [V]
+    type: RTD
+    uncertainty: y = 0.15 + 0.002*x [C]
+Tl8:
+    channel: '105'
+    date: 6/26/2017 3:43:39 PM
+    equation: <typeK_thermocouple>
+    id: Tl8
+    measure_units: [C]
+    name: Tl8
+    range: None
+    reponsible: Bailey
+    signal: [V]
+    type: thermocouple
+    uncertainty:
+    - 1.1 [C]
+    - 0.4 [%]
+    - max
+Tout:
+    channel: '204'
+    date: 6/26/2017 3:43:39 PM
+    equation: null
+    id: Tout
+    measure_units: [C]
+    name: Tout
+    range: None
+    reponsible: Bailey
+    signal: [V]
+    type: RTD
+    uncertainty: y = 0.15 + 0.002*x [C]
+Treturn:
+    channel: '202'
+    date: 6/26/2017 3:43:39 PM
+    equation: <typeK_thermocouple>
+    id: Treturn
+    measure_units: [K]
+    name: Treturn
+    range: None
+    reponsible: Bailey
+    signal: [V]
+    type: thermocouple
+    uncertainty:
+    - 1.1 [K]
+    - y = 0.004*(x-273.15) [K] 
+    - max
+Tvent:
+    channel: '101'
+    date: 6/26/2017 3:43:39 PM
+    equation: <typeK_thermocouple>
+    id: Tvent
+    measure_units: [K]
+    name: Tvent
+    range: None
+    reponsible: Bailey
+    signal: [V]
+    type: thermocouple
+    uncertainty:
+    - 1.1 [K]
+    - y = 0.004*(x-273.15) [K]
+    - max
+dPbypass:
+    channel: '118'
+    date: 6/26/2017 3:43:39 PM
+    equation: 3619.2468*y + -3907.8804
+    id: dPbypass
+    measure_units: [PA]
+    name: dPbypass
+    range: Auto
+    reponsible: Bailey
+    signal: [A]
+    type: Differential Pressure Transducer
+    uncertainty: 0 [PA]
+dPreturn:
+    channel: '211'
+    date: 6/26/2017 3:43:39 PM
+    equation: 62052.6406*y + -62051.6063
+    id: dPreturn
+    measure_units: [PA]
+    name: dPreturn
+    range: Auto
+    reponsible: Bailey
+    signal: [A]
+    type: Differential Pressure Transducer
+    uncertainty: 12 [PA]
+dPtest:
+    channel: '121'
+    date: 6/26/2017 3:43:39 PM
+    equation: 1491.69*y + -5.9175
+    id: dPtest
+    measure_units: [PSI]
+    name: dPtest
+    range: Auto
+    reponsible: Bailey
+    signal: [A]
+    type: Differential Pressure Transducer
+    uncertainty: 0.04773190074781428 [PSI]
+dPvent:
+    channel: '221'
+    date: 6/26/2017 3:43:39 PM
+    equation: 373250*y + -1493
+    id: dPvent
+    measure_units: [PA]
+    name: dPvent
+    range: 1 A
+    reponsible: Bailey
+    signal: [A]
+    type: Differential Pressure Transducer
+    uncertainty: 12 [PA]

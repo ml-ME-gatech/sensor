@@ -85,6 +85,16 @@ class TestUncertaintyParsing(unittest.TestCase):
 
         self.assertEqual(operator([0,1]),0.5)
 
+    def test_multiple_letter_unit(self):
+
+        uncertainty = _parse_uncertainty('3.4470e4 [PA]')
+        self.assertEqual(uncertainty[0][0],34470.0)
+
+    def test_zero_uncertainty(self):
+
+        uncertainty = _parse_uncertainty('0 [PA]')
+        self.assertEqual(uncertainty[0][0],0)
+
 class TestApplyingUncertainty(unittest.TestCase):
 
     array = np.linspace(0,1,10)
