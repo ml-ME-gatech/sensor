@@ -118,7 +118,6 @@ def temperature_diff_wrapped(q: float,
 #Database accessing
 db_path = 'example_db'
 files = os.listdir(db_path)
-
 #these are the only columns we are interested in. 
 columns_of_interest = ['Tvent [K]', 'Tl8 [C]', 'T6 [C]', 'T4 [C]', 'T2 [C]',
        'Pbypass [PSI]', 'dPbypass [PA]', 'dPtest [PSI]', 'Pvent [PSI]',
@@ -210,9 +209,9 @@ for i in range(len(files)):
 
     #get the window that minimizes averaged data variance
     rm = df.rolling(num_samples).mean()
-    normalized_variance_mean = df.rolling(num_samples).var()/rm
+    coefficient_variation = df.rolling(num_samples).std()/rm
 
-    var_min_index = normalized_variance_mean['Re [-]'].argmin()
+    var_min_index = coefficient_variation['Re [-]'].argmin()
     min_var_window = [var_min_index - num_samples,var_min_index]
     index = int(var_min_index -num_samples/2)
 
