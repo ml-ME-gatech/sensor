@@ -1,24 +1,11 @@
 Development:
-	- [X] add class instantation through regular dictionary interface
-	- [X] add fromkeys method for SensorArray (i.e. make every key a Sensor for SensorArray)
 	- pass dictionary of root_finders into convert function
-	- [X] add equation library
-		- [X] temporarily
-		- [X] permanently
-	- [X] write Sensor to yaml
-	- [X] write SensorArray to yaml
 	- convert date field to datetime index
-Tests:
-	- [X] Reporting Tests
-		- [X ] markdown
-			- [X] Sensor
-			- [X] SensorArray
-		- [X] table
-			- [X] tablefmt
-			- [X] headerfmt
-			- [X] attributes as columns
-			- [X] can use existing example as guide
+	- convert equation based compilation into class based system
+	- improve library equation handler 
+	- add ability to reference library equation paths IN the sensor files
 
+Tests:
 	- Equation tests
 		- compilation tests
 			- explicit
@@ -30,22 +17,10 @@ Tests:
 			- correctly calculates results
 			- from temporary library
 			- from additional permanent libraries
-
-	- [X] Uncertainty tests
-		- [X] compilation tests
-			- [X] correctly discerning units,value from single item
-			- [X] correctly discerning units, value in list
-			- [X] correctly discerning units,value and operator in list
-		- [X] application tests
-			- [X] applying percentage 
-			- [X] applying constant values
-			- [X] applying equations
-			- [X] applying operator
 	- Utility tests
 		- test _get_units
-
+	
 - Documentation
-	- [X] Finish example on uncertatainty in processing_sensor_example
 	- Tutorials
 		- Simple sensor reporting and processing 
 		- intermediate sensor reporting and processing
